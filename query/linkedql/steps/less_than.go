@@ -20,7 +20,7 @@ var _ linkedql.PathStep = (*LessThan)(nil)
 
 // LessThan corresponds to lt().
 type LessThan struct {
-	From  linkedql.PathStep   `json:"from"`
+	From  linkedql.PathStep   `json:"from" minCardinality:"0"`
 	Value quad.Value `json:"value"`
 }
 

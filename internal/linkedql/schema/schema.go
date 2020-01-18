@@ -10,7 +10,6 @@ import (
 	_ "github.com/cayleygraph/cayley/query/linkedql/steps"
 	"github.com/cayleygraph/quad"
 	"github.com/cayleygraph/quad/voc/owl"
-	"github.com/cayleygraph/quad/voc/rdf"
 	"github.com/cayleygraph/quad/voc/rdfs"
 	"github.com/cayleygraph/quad/voc/xsd"
 )
@@ -25,7 +24,6 @@ var (
 	iteratorStep     = reflect.TypeOf((*linkedql.IteratorStep)(nil)).Elem()
 	entityIdentifier = reflect.TypeOf((*linkedql.EntityIdentifier)(nil)).Elem()
 	value            = reflect.TypeOf((*quad.Value)(nil)).Elem()
-	operator         = reflect.TypeOf((*linkedql.Operator)(nil)).Elem()
 	propertyPath     = reflect.TypeOf((*linkedql.PropertyPath)(nil)).Elem()
 	stringMap        = reflect.TypeOf(map[string]string{})
 	graphPattern     = reflect.TypeOf(linkedql.GraphPattern(nil))
@@ -52,9 +50,6 @@ func typeToRange(t reflect.Type) string {
 	}
 	if t.Implements(pathStep) {
 		return linkedql.Prefix + "PathStep"
-	}
-	if t.Implements(operator) {
-		return linkedql.Prefix + "Operator"
 	}
 	if t.Implements(value) {
 		return rdfs.Resource
@@ -341,11 +336,11 @@ func (g *generator) Generate() []byte {
 	graph = append(graph, g.out...)
 	data, err := json.Marshal(map[string]interface{}{
 		"@context": map[string]interface{}{
-			"rdf":      rdf.NS,
-			"rdfs":     rdfs.NS,
-			"owl":      owl.NS,
-			"xsd":      xsd.NS,
-			"linkedql": linkedql.Namespace,
+			"rdf":      "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+			"rdfs":     "http://www.w3.org/2000/01/rdf-schema#",
+			"owl":      "http://www.w3.org/2002/07/owl#",
+			"xsd":      "http://www.w3.org/2001/XMLSchema#",
+			"linkedql": "http://cayley.io/linkedql#",
 			"rdfg":     rdfgNamespace,
 		},
 		"@graph": graph,
